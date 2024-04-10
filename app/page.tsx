@@ -12,7 +12,6 @@ export default function Home() {
   const nucliaFindUrl = `https://aws-us-east-2-1.nuclia.cloud/api/v1/kb/3b486dc9-c540-464b-91df-3fd23c632069/find`
 
   const handleSearch = async (event: FormEvent) => {
-    console.log("hello world")
     event.preventDefault();
     setIsLoading(true);
     const payload = {
@@ -34,11 +33,6 @@ export default function Home() {
     }
     try {
       const response = await axios.post(nucliaFindUrl, payload);
-      // console.log(response.data.resources.map((resource: any) => console.log(resource.fields)));
-      Object.values(resources).map((resource: any) => (
-        console.log(resource, 'resource')
-        // console.log(resource.fields)
-      ))
       setResources(response.data.resources);
       setIsLoading(false);
     } catch (error) {
@@ -97,23 +91,23 @@ export default function Home() {
         <div>
         {
         Object.values(resources).map((resource: any) => {
-          return (
-            <div key={resource.id} className="border border-gray-300 rounded-md p-4 mb-4 flex items-center">
+            return (
+            <div key={resource.id} className="border border-gray-300 rounded-md p-4 mb-4 flex items-start">
               <img src={`https://aws-us-east-2-1.nuclia.cloud/api/v1${resource.thumbnail}`} alt="Thumbnail" width={300} className="mr-4"/>
               <div>
-                <h2 className="text-xl font-bold">{resource.title}</h2>
-                <p>{resource.title}</p>
+              <h2 className="text-xl font-bold">{resource.title}</h2>
+              <p>{resource.title}</p>
 
-                {resource.fields['/u/link'] && Object.values(resource.fields['/u/link'].paragraphs).map((paragraph: any) => {
-                  return (
-                    <li key={paragraph.id} className="border border-gray-300 rounded-md p-4 mb-4">
-                      {paragraph.text}
-                    </li>
-                  );
-                })}
+              {resource.fields['/u/link'] && Object.values(resource.fields['/u/link'].paragraphs).map((paragraph: any) => {
+                return (
+                <li key={paragraph.id} className="border border-gray-300 rounded-md p-4 mb-4">
+                  {paragraph.text}
+                </li>
+                );
+              })}
               </div>
             </div>
-          );
+            );
         })
         }
         </div>
